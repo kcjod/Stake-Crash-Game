@@ -1,6 +1,12 @@
 import random as rd
 import time
 import msvcrt
+import os
+
+# Function to clear only the upper line
+def clear_upper_line():
+    # Move cursor up one line and clear the line
+    print("\033[F\033[K", end='')
 
 wallet = float(input("Enter amount to add into wallet: "))
 
@@ -37,6 +43,7 @@ else:
             start = 1.00
             cashed = False
             while start <= total:
+                clear_upper_line()  # Clear the upper line before printing the new multiplier
                 print(f"{start:.2f}")
                 time.sleep(0.01)
                 if is_key_pressed():
@@ -48,15 +55,16 @@ else:
                         wallet += cashout_amount
                         break
                 
-                if(start>=auto_cashout):
-                        cashout_amount = bet * start
-                        cashed = True
-                        print(f"Cashed out at {start:.2f}. Added {cashout_amount:.2f} to wallet.")
-                        wallet += cashout_amount
-                        break
+                if start >= auto_cashout:
+                    cashout_amount = bet * start
+                    cashed = True
+                    print(f"Cashed out at {start:.2f}. Added {cashout_amount:.2f} to wallet.")
+                    wallet += cashout_amount
+                    break
+                
                 start += 0.01
             
-            if cashed==False:
+            if not cashed:
                 wallet -= bet
             
             print(f"Crashed at {total:.2f}")
